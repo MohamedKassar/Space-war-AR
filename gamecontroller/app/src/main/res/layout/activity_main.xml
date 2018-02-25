@@ -17,21 +17,21 @@
             android:orientation="horizontal">
 
             <TextView
-                android:gravity="center"
-                android:id="@+id/textView4"
+                android:id="@+id/textview"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="Ip address" />
 
             <EditText
-                android:id="@+id/editText5"
+                android:id="@+id/ipaddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:digits="0123456789."
                 android:ems="10"
                 android:inputType="number|numberDecimal"
-                android:digits="0123456789."
                 android:text="" />
         </LinearLayout>
 
@@ -49,13 +49,14 @@
                 android:text="port" />
 
             <EditText
-                android:id="@+id/editText4"
+                android:id="@+id/port"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
+                android:digits="0123456789"
                 android:inputType="number"
-                android:text=""
-                android:layout_width="match_parent" />
+                android:text="" />
 
         </LinearLayout>
 

@@ -5,16 +5,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import java.net.Socket;
+
 public class ControllerActivity extends AppCompatActivity {
 
+    private Socket sc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_controller);
+        Intent i = getIntent();
+        sc = (Socket)i.getSerializableExtra("socket");
+
     }
 
     public void disconnect(View v){
-        Intent i = new Intent(this, MainActivity.class);
         finish();
+    }
+
+    public void turnRight(){
+
+    }
+
+    public void  turnLeft(){
+
     }
 }
