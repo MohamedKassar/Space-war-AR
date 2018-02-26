@@ -9,28 +9,45 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Client sc;
+    private Socket sc = null;
     private String hostName;
     private int port;
-    private Boolean con = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        new Thread(() -> {
+            Socket c = null;
+            ServerSocket s = null;
+            try {
+                s = new ServerSocket(4000);
+                c = s.accept();
+                c.setKeepAlive(true);
+                runOnUiThread(() -> showMessage("connected tp server"));
+                while (true);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }).start();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         try {
-            if( sc != null && sc.isConnected())
-            sc.close();
+            if (sc != null && sc.isConnected())
+                sc.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -51,31 +68,6 @@ public class MainActivity extends AppCompatActivity {
             port = Integer.parseInt(et2.getText().toString());
             Thread serverThread = new Thread(new ConnexionThread());
             serverThread.start();
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    synchronized (con) {
-                        try {
-                            con.wait();
-                            if (!con)
-                                return;
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Intent i = new Intent(MainActivity.this, ControllerActivity.class);
-                            i.putExtra("client", sc);
-                            startActivity(i);
-                        }
-                    });
-                }
-
-            }).start();
         }
     }
 
@@ -83,27 +75,21 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             try {
 
-                sc = new Client();
-                sc.connect(new InetSocketAddress(hostName, port), 5*1000);
-                synchronized (con) {
-                    con = true;
-                    con.notifyAll();
-                }
+                sc = new Socket();
+                sc.connect(new InetSocketAddress(hostName,port), 1000*5);
+                Client.setSocket(sc);
+                runOnUiThread(() -> {
+                    Intent i = new Intent(MainActivity.this, ControllerActivity.class);
+                    startActivity(i);
+                });
 
             } catch (Exception e) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showMessage("Couldn't establish connexion");
-                        synchronized (con) {
-                            con.notifyAll();
-                        }
-                    }
-                });
+                e.printStackTrace();
+                runOnUiThread(() -> showMessage("Couldn't establish connexion"));
 
             } finally {
                 try {
-                    if( sc != null && sc.isConnected() )
+                    if (sc != null && sc.isConnected())
                         sc.close();
                 } catch (IOException e) {
                     e.printStackTrace();

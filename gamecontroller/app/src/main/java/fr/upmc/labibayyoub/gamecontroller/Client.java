@@ -8,14 +8,16 @@ import java.net.Socket;
  * Created by labib on 25/02/2018.
  */
 
-public class Client extends Socket implements Serializable {
+public  class Client {
 
+    private static Socket socket;
 
-    public Client(String host, int port) throws IOException {
-        super(host, port);
+    public static synchronized Socket getSocket(){
+        return socket;
     }
-    public Client()  {
-    }
 
+    public static synchronized void setSocket(Socket socket){
+        Client.socket = socket;
+    }
 
 }
