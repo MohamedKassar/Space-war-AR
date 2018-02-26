@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         try {
+            if( sc != null && sc.isConnected())
             sc.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -81,12 +83,15 @@ public class MainActivity extends AppCompatActivity {
         public void run() {
             try {
 
-                sc = new Client(hostName, port);
+                sc = new Client();
+                sc.connect(new InetSocketAddress(hostName, port), 5*1000);
                 synchronized (con) {
                     con = true;
+                    con.notifyAll();
                 }
 
             } catch (Exception e) {
+                System.out.println("not conn");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -97,6 +102,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+            } finally {
+                try {
+                    if( sc != null && sc.isConnected() )
+                        sc.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

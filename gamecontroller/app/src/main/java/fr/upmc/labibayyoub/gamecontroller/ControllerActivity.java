@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import java.io.IOException;
 import java.net.Socket;
 
 public class ControllerActivity extends AppCompatActivity {
@@ -19,7 +20,10 @@ public class ControllerActivity extends AppCompatActivity {
 
     }
 
-    public void disconnect(View v){
+    public void disconnect(View v) throws IOException {
+       if(sc != null ){
+           sc.close();
+       }
         finish();
     }
 

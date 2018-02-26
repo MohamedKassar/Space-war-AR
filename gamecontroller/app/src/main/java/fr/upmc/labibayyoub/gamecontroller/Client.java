@@ -14,6 +14,8 @@ public class Client extends Socket implements Serializable {
     public Client(String host, int port) throws IOException {
         super(host, port);
     }
+    public Client()  {
+    }
 
 
 }
