@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             } catch (Exception e) {
-                System.out.println("not conn");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

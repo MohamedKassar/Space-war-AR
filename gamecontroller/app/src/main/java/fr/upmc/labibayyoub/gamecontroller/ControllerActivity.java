@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-
 import java.io.IOException;
 import java.net.Socket;
 
@@ -16,15 +15,23 @@ public class ControllerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_controller);
         Intent i = getIntent();
-        sc = (Socket)i.getSerializableExtra("socket");
-
+        sc = (Socket)i.getSerializableExtra("client");
     }
 
-    public void disconnect(View v) throws IOException {
+    public void disconnect() throws IOException {
        if(sc != null ){
            sc.close();
        }
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        try {
+            disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void turnRight(){
