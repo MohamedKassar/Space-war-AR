@@ -1,6 +1,6 @@
 package fr.upmc.spacewarar.main;
 
-import fr.upmc.spacewarar.engin.Game;
+import fr.upmc.spacewarar.engine.Game;
 
 public class MainClass {
 	public static void main(String[] args) {

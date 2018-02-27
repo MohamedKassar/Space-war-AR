@@ -1,4 +1,4 @@
-package fr.upmc.spacewarar.ocv;
+package fr.upmc.spacewarar.ocv.interfaces;
 
 public interface IObjectTracker {
 	/**

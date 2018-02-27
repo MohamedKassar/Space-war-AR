@@ -1,7 +1,7 @@
-package fr.upmc.spacewarar.engin;
+package fr.upmc.spacewarar.engine;
 
-import fr.upmc.spacewarar.engin.interfaces.events.IEventTrigger;
-import fr.upmc.spacewarar.engin.interfaces.events.ScoreChangedEvent;
+import fr.upmc.spacewarar.engine.interfaces.events.IEventTrigger;
+import fr.upmc.spacewarar.engine.interfaces.events.ScoreChangedEvent;
 
 /**
  * 

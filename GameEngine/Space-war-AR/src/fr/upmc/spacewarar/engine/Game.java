@@ -1,6 +1,6 @@
-package fr.upmc.spacewarar.engin;
+package fr.upmc.spacewarar.engine;
 
-import fr.upmc.spacewarar.engin.interfaces.events.IEventTrigger;
+import fr.upmc.spacewarar.engine.interfaces.events.IEventTrigger;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
@@ -14,6 +14,7 @@ public class Game {
 	private static Game CURRENT_GAME = new Game();
 
 	private final EventTrigger eventTrigger = new EventTrigger();
+	
 	private final SimpleIntegerProperty scoreProperty = new SimpleIntegerProperty(0);
 	private final SimpleIntegerProperty lifeProperty = new SimpleIntegerProperty(100);
 	private final SimpleBooleanProperty gameOverProperty = new SimpleBooleanProperty();
@@ -56,9 +57,4 @@ public class Game {
 		return CURRENT_GAME;
 	}
 
-	public static void main(String[] args) {
-		CURRENT_GAME.getEventTrigger().setOnScoreChanged(System.out::println);
-		CURRENT_GAME.setScore(50);
-		CURRENT_GAME.setScore(30);
-	}
 }

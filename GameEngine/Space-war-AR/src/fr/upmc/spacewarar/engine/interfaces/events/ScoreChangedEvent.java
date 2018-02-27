@@ -1,4 +1,4 @@
-package fr.upmc.spacewarar.engin.interfaces.events;
+package fr.upmc.spacewarar.engine.interfaces.events;
 
 /**
  * 
