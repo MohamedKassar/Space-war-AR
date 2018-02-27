@@ -1,4 +1,6 @@
-package fr.upmc.spacewarar.engine.interfaces.events;
+package fr.upmc.spacewarar.engine.interfaces;
+
+import fr.upmc.spacewarar.engine.interfaces.events.ScoreEvent;
 
 /**
  * 
@@ -7,7 +9,7 @@ package fr.upmc.spacewarar.engine.interfaces.events;
  */
 public interface IEventTrigger {
 
-	void setOnScoreChanged(ScoreChangedEvent event);
+	void setOnScoreChanged(ScoreEvent event);
 
 	void setOnLeftCollision(Runnable event);
 
@@ -15,4 +17,5 @@ public interface IEventTrigger {
 
 	void setOnGameOver(Runnable event);
 
+	void setOnGameWinning(ScoreEvent event);
 }

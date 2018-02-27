@@ -6,6 +6,6 @@ package fr.upmc.spacewarar.engine.interfaces.events;
  *
  */
 @FunctionalInterface
-public interface ScoreChangedEvent {
+public interface ScoreEvent {
 	void run(int score);
 }
