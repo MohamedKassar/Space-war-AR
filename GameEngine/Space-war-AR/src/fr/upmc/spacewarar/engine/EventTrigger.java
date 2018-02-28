@@ -8,13 +8,16 @@ import fr.upmc.spacewarar.engine.interfaces.events.ScoreEvent;
  * @author Mohamed T. Kassar & Hakima Bouguetof
  *
  */
-class EventTrigger implements IEventTrigger {
+public class EventTrigger implements IEventTrigger {
 	private ScoreEvent changedScoreEvent;
 	private ScoreEvent gameWinningEvent;
 	private Runnable leftCollisionEvent;
 	private Runnable rightCollisionEvent;
 	private Runnable gameOverEvent;
 
+	protected EventTrigger() {
+	}
+	
 	@Override
 	public void setOnScoreChanged(ScoreEvent event) {
 		changedScoreEvent = event;
@@ -41,31 +44,31 @@ class EventTrigger implements IEventTrigger {
 	}
 	
 	
-	protected void scoreChangedTrigger(int score) {
+	public void scoreChangedTrigger(int score) {
 		if (changedScoreEvent == null)
 			throw new RuntimeException("changedScoreEvent is not set !");
 		changedScoreEvent.run(score);
 	}
 
-	protected void leftCollisionTrigger() {
+	public void leftCollisionTrigger() {
 		if (leftCollisionEvent == null)
 			throw new RuntimeException("leftCollisionEvent is not set !");
 		leftCollisionEvent.run();
 	}
 
-	protected void rightCollisionTrigger() {
+	public void rightCollisionTrigger() {
 		if (rightCollisionEvent == null)
 			throw new RuntimeException("rightCollisionEvent is not set !");
 		rightCollisionEvent.run();
 	}
 	
-	protected void gameOverTrigger() {
+	public void gameOverTrigger() {
 		if (gameOverEvent == null)
 			throw new RuntimeException("gameOverEvent is not set !");
 		gameOverEvent.run();
 	}
 
-	protected void gameWinningEventTrigger(int score) {
+	public void gameWinningEventTrigger(int score) {
 		if (gameWinningEvent == null)
 			throw new RuntimeException("gameWinningEvent is not set !");
 		gameWinningEvent.run(score);

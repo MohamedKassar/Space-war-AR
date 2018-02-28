@@ -16,31 +16,37 @@ public class Game implements IGame {
 	private static Game CURRENT_GAME = new Game();
 
 	private final EventTrigger eventTrigger = new EventTrigger();
-	private final Engine engine = new Engine();
-	
+	private final Engine engine = new Engine(this);
+
 	/*
 	 * TODO right/left collision
 	 */
-	private final SimpleIntegerProperty scoreProperty = new SimpleIntegerProperty(0);
-	private final SimpleIntegerProperty lifeProperty = new SimpleIntegerProperty(100);
-	private final SimpleBooleanProperty gameOverProperty = new SimpleBooleanProperty(false);
-	private final SimpleBooleanProperty gameWonProperty = new SimpleBooleanProperty(false);
-	
-	protected Game() {
-		// init preperties
-		gameOverProperty.bind(lifeProperty.lessThanOrEqualTo(0));
+	private SimpleIntegerProperty scoreProperty;
 
+	private SimpleBooleanProperty gameOverProperty;
+	private SimpleBooleanProperty gameWonProperty;
+
+	protected Game() {
+		// reinitGame();
+	}
+
+	void reinitGame() {
+		scoreProperty = new SimpleIntegerProperty(0);
+		gameOverProperty = new SimpleBooleanProperty(false);
+		gameWonProperty = new SimpleBooleanProperty(false);
+		// init preperties
+		gameOverProperty.bind(engine.getRobot().lifeProperty().lessThanOrEqualTo(0));
 		// init triggers
 		scoreProperty.addListener((ObservableValue<? extends Number> observable, Number oldValue,
 				Number newValue) -> eventTrigger.scoreChangedTrigger(newValue.intValue()));// TODO : maybe put this code
 																							// in setScore
-
 		gameOverProperty
 				.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
 					if (newValue) {
 						gameOver();
 					}
 				});
+
 	}
 
 	private void gameOver() {
@@ -48,21 +54,15 @@ public class Game implements IGame {
 		eventTrigger.gameOverTrigger();
 	}
 
-
-	protected void setScore(int score) { // TODO : increaseScoreBy !!
+	public void setScore(int score) { // TODO : increaseScoreBy !!
 		scoreProperty.set(score);
 	}
 
-	protected void setLife(int life) { // TODO: change it by decreaseLifeBy !
-		lifeProperty.set(life);
-	}
-
-	protected void setGameWon() {
+	public void setGameWon() {
 		gameWonProperty.set(true);
 		eventTrigger.gameWinningEventTrigger(getScore());
 	}
-	
-	
+
 	protected boolean isGameOver() {
 		return gameOverProperty.get();
 	}
@@ -78,7 +78,7 @@ public class Game implements IGame {
 	protected Engine getEngine() {
 		return engine;
 	}
-	
+
 	@Override
 	public IEventTrigger getEventTrigger() {
 		return eventTrigger;
@@ -88,7 +88,7 @@ public class Game implements IGame {
 	public IGameController getGameController() {
 		return engine;
 	}
-	
+
 	public static IGame getCurrentGame() {
 		return CURRENT_GAME;
 	}

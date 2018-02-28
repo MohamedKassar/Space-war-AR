@@ -1,20 +1,36 @@
 package fr.upmc.spacewarar.main;
 
+import fr.upmc.spacewarar.engine.Engine;
 import fr.upmc.spacewarar.engine.Game;
 import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class MainClass extends Application {
-	public static void main(String[] args) {
-		
-		Game.getCurrentGame().getEventTrigger().setOnScoreChanged(score -> {
-			System.err.println(score);
-		});
-	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub
+		primaryStage.setTitle("Space war AR");
+		// primaryStage.getIcons()
+		Scene scene = new Scene(Engine.getCanvas(), 1920, 1080);
+		primaryStage.setScene(scene);
+		Engine.getCanvas().getChildren().add(new Label());
+		primaryStage.setResizable(false);
+		primaryStage.show();
+		primaryStage.setFullScreen(true);
+
+		scene.setOnKeyTyped((KeyEvent event) -> {
+			if (event.getCharacter().equals("f")) {
+				primaryStage.setFullScreen(true);
+			}
+		});
 		
+		Game.getCurrentGame().getGameController().start();
+	}
+
+	public static void main(String[] args) {
+		Application.launch(args);
 	}
 }
