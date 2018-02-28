@@ -16,7 +16,6 @@ public class Game implements IGame {
 	private static Game CURRENT_GAME = new Game();
 
 	private final EventTrigger eventTrigger = new EventTrigger();
-	private final GameController gameController = new GameController();
 	private final Engine engine = new Engine();
 	
 	/*
@@ -27,9 +26,6 @@ public class Game implements IGame {
 	private final SimpleBooleanProperty gameOverProperty = new SimpleBooleanProperty(false);
 	private final SimpleBooleanProperty gameWonProperty = new SimpleBooleanProperty(false);
 	
-
-	
-
 	protected Game() {
 		// init preperties
 		gameOverProperty.bind(lifeProperty.lessThanOrEqualTo(0));
@@ -90,19 +86,11 @@ public class Game implements IGame {
 
 	@Override
 	public IGameController getGameController() {
-		return gameController;
+		return engine;
 	}
 	
 	public static IGame getCurrentGame() {
 		return CURRENT_GAME;
 	}
 
-	public static void main(String[] args) {
-		Game c = CURRENT_GAME;
-		System.out.println(c.isGameOver());
-		c.setLife(5);
-		System.out.println(c.isGameOver());
-		c.setLife(0);
-		System.out.println(c.isGameOver());
-	}
 }

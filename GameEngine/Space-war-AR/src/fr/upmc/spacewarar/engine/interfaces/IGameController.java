@@ -12,11 +12,5 @@ public interface IGameController {
 
 	void start();
 
-	void startMovingRight();
-
-	void startMovingLeft();
-
-	void stopMoving();
-
 	void shoot();
 }
