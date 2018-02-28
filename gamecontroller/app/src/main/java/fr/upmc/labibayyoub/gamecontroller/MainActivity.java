@@ -8,9 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -24,23 +22,12 @@ public class MainActivity extends AppCompatActivity {
     private int port;
     private String IP_REGULAR_EXPRESSION = "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
     private Button connect;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         connect = findViewById(R.id.connect);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        try {
-            if (sc != null && sc.isConnected())
-                sc.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        super.onStop();
     }
 
     public void onButtonClick(View v) {
@@ -51,11 +38,11 @@ public class MainActivity extends AppCompatActivity {
             showMessage("Ip address is empty");
         else if (et2.getText().toString().isEmpty())
             showMessage("Port is empty");
-        else if (!MatchString(IP_REGULAR_EXPRESSION,hostName))
+        else if (!MatchString(IP_REGULAR_EXPRESSION, hostName))
             showMessage("Ip address is invalid");
         else {
             port = Integer.parseInt(et2.getText().toString());
-            connect.setEnabled(false);
+
             Thread serverThread = new Thread(new ConnexionThread());
             serverThread.start();
         }
@@ -64,15 +51,18 @@ public class MainActivity extends AppCompatActivity {
     class ConnexionThread implements Runnable {
         public void run() {
             try {
-
                 sc = new Socket();
-                 new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        runOnUiThread(() -> connect.setEnabled(true));
-                    }
-                }, 5000);
-                sc.connect(new InetSocketAddress(hostName,port), 5000);
+                runOnUiThread(() -> {
+                    connect.setEnabled(false);
+                    new Timer().schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            runOnUiThread(() -> connect.setEnabled(true));
+                        }
+                    }, 5000);
+                });
+
+                sc.connect(new InetSocketAddress(hostName, port), 5000);
                 Client.setSocket(sc);
                 runOnUiThread(() -> {
                     Intent i = new Intent(MainActivity.this, ControllerActivity.class);
@@ -80,16 +70,8 @@ public class MainActivity extends AppCompatActivity {
                 });
 
             } catch (Exception e) {
-                e.printStackTrace();
+                e.printStackTrace(System.out);
                 runOnUiThread(() -> showMessage("Couldn't establish connexion"));
-
-            } finally {
-                try {
-                    if (sc != null && sc.isConnected())
-                        sc.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
@@ -103,4 +85,6 @@ public class MainActivity extends AppCompatActivity {
         Matcher m = p.matcher(text);
         return m.matches();
     }
+
+
 }

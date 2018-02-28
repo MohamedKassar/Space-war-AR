@@ -53,7 +53,6 @@
 
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/pause"
-                android:onClick="turnLeft"
                 android:text="left" />
 
             <Button
@@ -64,7 +63,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="29dp"
-                android:onClick="turnRight"
                 android:text="right" />
 
         </RelativeLayout>
