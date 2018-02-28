@@ -34,7 +34,7 @@ public class ControllerActivity extends AppCompatActivity {
     public static final String SWITCH_D = "SWITCH D";
     public static final String GO = "GO";
     public static final String GG = "GG";
-    public static final String SCORE = "SCORE";
+    public static final String SHOOT = "SHOOT";
     private String SCORE_REGULAR_EXPRESSION = "SCORE +[0-9]+";
     private String GG_REGULAR_EXPRESSION = "GG +[0-9]+";
     private Button left;
@@ -70,10 +70,7 @@ public class ControllerActivity extends AppCompatActivity {
 
 
         }).start();
-
-
     }
-
 
     private void receiveCommands() {
 
@@ -129,6 +126,9 @@ public class ControllerActivity extends AppCompatActivity {
         return true;
     }
 
+    public void  shoot(View v){
+        sendCommands(SHOOT);
+    }
 
     public void disconnect(View v) {
         sendCommands(STOP);
@@ -145,13 +145,6 @@ public class ControllerActivity extends AppCompatActivity {
         }).start();
 
 
-    }
-
-    @Override
-    protected void onDestroy() {
-
-
-        super.onDestroy();
     }
 
     public void sendCommands(String msg) {
