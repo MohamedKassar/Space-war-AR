@@ -29,22 +29,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         connect = findViewById(R.id.connect);
-        new Thread(() -> {
-
-            Socket c = null;
-            ServerSocket s = null;
-            try {
-                s = new ServerSocket(4000);
-                c = s.accept();
-                c.setKeepAlive(true);
-                runOnUiThread(() -> showMessage("connected tp server"));
-                while (true);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }).start();
     }
 
     @Override

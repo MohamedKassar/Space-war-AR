@@ -14,6 +14,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ControllerActivity extends AppCompatActivity {
@@ -44,7 +45,7 @@ public class ControllerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_controller);
-        try {
+
             if ((sc = Client.getSocket()) == null)
                 finish();
             left = findViewById(R.id.left);
@@ -54,13 +55,20 @@ public class ControllerActivity extends AppCompatActivity {
             score_tv.setText("0");
             left.setOnTouchListener((v, e) ->  (onRelease(v, e)));
             right.setOnTouchListener((v, e) -> (onRelease(v, e)));
-            out = new BufferedWriter(new OutputStreamWriter(sc.getOutputStream()));
-            in = new BufferedReader(new InputStreamReader(sc.getInputStream()));
-            sendCommands(START);
-            receiveCommands();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            new Thread(()->{
+                try {
+                    out = new BufferedWriter(new OutputStreamWriter(sc.getOutputStream()));
+                    in = new BufferedReader(new InputStreamReader(sc.getInputStream()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(()->{
+                    sendCommands(START);
+                    receiveCommands();
+                });
+
+            }).start();
+
 
 
     }

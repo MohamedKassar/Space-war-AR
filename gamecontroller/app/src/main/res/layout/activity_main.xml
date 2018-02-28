@@ -32,7 +32,7 @@
                 android:digits="0123456789."
                 android:ems="10"
                 android:inputType="number|numberDecimal"
-                android:text="" />
+                android:text="134.157.249.218" />
         </LinearLayout>
 
         <LinearLayout
@@ -53,10 +53,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:ems="10"
                 android:digits="0123456789"
+                android:ems="10"
                 android:inputType="number"
-                android:text="" />
+                android:text="4000" />
 
         </LinearLayout>
 
