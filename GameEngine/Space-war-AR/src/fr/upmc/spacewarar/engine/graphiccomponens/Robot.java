@@ -60,7 +60,7 @@ public class Robot extends GraphicComponent {
 
 	private int lastShoot = Engine.FPS / 8 + 1;
 	public void sendCommand(Command command) {
-		if (this.command == Command.NONE && lastShoot > Engine.FPS / 8) {
+		if (this.command == Command.NONE && lastShoot > Engine.FPS / 5) {
 			this.command = command;
 			lastShoot = 0;
 		}

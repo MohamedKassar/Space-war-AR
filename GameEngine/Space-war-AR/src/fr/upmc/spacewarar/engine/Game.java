@@ -35,40 +35,42 @@ public class Game implements IGame {
 		gameOverProperty.bind(engine.getRobot().lifeProperty().lessThanOrEqualTo(0));
 		gameWonProperty.bind(engine.wonProperty());
 		// init triggers
-		scoreProperty.addListener((ObservableValue<? extends Number> observable, Number oldValue,
-				Number newValue) -> eventTrigger.scoreChangedTrigger(newValue.intValue()));// TODO : maybe put this code
-																							// in setScore
+		scoreProperty.addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+			Engine.scoreLabel.setText("Score : " + newValue);
+			eventTrigger.scoreChangedTrigger(newValue.intValue());
+		});
 		gameOverProperty
 				.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
 					if (newValue) {
 						setGameOver();
 					}
 				});
-		gameWonProperty.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-			if (newValue) {
-				setGameWon();
-			}
-		});
+		gameWonProperty
+				.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+					if (newValue) {
+						setGameWon();
+					}
+				});
 
 	}
 
 	private void setGameOver() {
-		// TODO :
-		// Show game over in the screen
 		engine.stop();
 		eventTrigger.gameOverTrigger();
 	}
 
 	private void setGameWon() {
-		// Show game won 
 		engine.stop();
-		eventTrigger.gameWinningEventTrigger(getScore());
+		eventTrigger.gameWinningEventTrigger(scoreProperty.get());
 	}
 
-	public void setScore(int score) { // TODO : increaseScoreBy !!
-		scoreProperty.set(score);
+	public void increaseScoreBy(int score) {
+		scoreProperty.set(scoreProperty.get() + score);
 	}
 
+	public void decreaseScoreBy(int score) {
+		scoreProperty.set(scoreProperty.get() - score);
+	}
 
 	protected boolean isGameOver() {
 		return gameOverProperty.get();
@@ -76,14 +78,6 @@ public class Game implements IGame {
 
 	protected boolean isGameWon() {
 		return gameWonProperty.get();
-	}
-
-	protected int getScore() {
-		return scoreProperty.get();
-	}
-
-	protected Engine getEngine() {
-		return engine;
 	}
 
 	@Override

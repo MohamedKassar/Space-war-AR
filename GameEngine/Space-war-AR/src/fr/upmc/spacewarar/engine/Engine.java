@@ -16,6 +16,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
@@ -40,6 +41,9 @@ public class Engine implements IGameController {
 	private static final AnchorPane gameWon = new AnchorPane();
 	private static final AnchorPane gamePaused = new AnchorPane();
 	private static final AnchorPane gameStart = new AnchorPane();
+
+	protected static final Label scoreLabel = new Label("Score : 000");
+	protected static final Label lifeLabel = new Label("Life : 100");
 
 	private final ObservableList<Enemy> enemies = FXCollections.observableArrayList();
 	private final ObservableList<Rocket> rockets = FXCollections.observableArrayList();
@@ -78,10 +82,19 @@ public class Engine implements IGameController {
 			AnchorPane.setRightAnchor(pair.getKey(), 0d);
 			AnchorPane.setLeftAnchor(pair.getKey(), 0d);
 			pair.getKey().getChildren().add(label);
-
 		});
 
+		scoreLabel.setLayoutX(1500);
+		scoreLabel.setLayoutY(10);
+		String style_ = "-fx-font-size: 40pt; -fx-font-family: 'Super Mario Bros.';-fx-text-fill: white;-fx-opacity: 0.95;";
+		scoreLabel.setStyle(style_);
+		lifeLabel.setStyle(style_);
+		lifeLabel.setLayoutX(60);
+		lifeLabel.setLayoutY(10);
+
 		canvas.getChildren().add(gameStart);
+		canvas.getChildren().add(scoreLabel);
+		canvas.getChildren().add(lifeLabel);
 	}
 
 	public static final int FPS = 60;
@@ -103,28 +116,34 @@ public class Engine implements IGameController {
 		rockets.forEach(rocket -> rocket.step());
 		enemies.forEach(enemy -> enemy.step());
 		robot.step();
-		enemies.stream().filter(x -> ThreadLocalRandom.current().nextInt(600) < 1).forEach(enemy -> {
-			addRocket(new Rocket(enemy.getLayoutX() + enemy.getPrefWidth() / 2,
-					enemy.getLayoutY() + enemy.getPrefHeight() + 2, Direction.DOWN, 20));
-		});
+		enemies.stream().filter(x -> ThreadLocalRandom.current().nextInt(600) / ((1 - (enemies.size() / 22)) + 1) < 1)
+				.forEach(enemy -> {
+					addRocket(new Rocket(enemy.getLayoutX() + enemy.getPrefWidth() / 2,
+							enemy.getLayoutY() + enemy.getPrefHeight() + 2, Direction.DOWN, 10));
+				});
 
 		List<Rocket> rocketsToRemove = new ArrayList<>();
 		rockets.forEach(rocket -> {
 			if (rocket.isEnemyRocket()) {
 				if (rocket.collidesWith(robot)) {
 					robot.decreaseLifeBy(rocket.getPower());
+					game.decreaseScoreBy(10);
 					rocketsToRemove.add(rocket);
 				}
 			} else {
 				enemies.stream().filter(enemy -> rocket.collidesWith(enemy)).forEach(enemy -> {
 					enemy.decreaseLifeBy(rocket.getPower());
+					game.increaseScoreBy(10);
 					rocketsToRemove.add(rocket);
 				});
 			}
-			rockets.stream().filter(r -> !r.equals(rocket) && rocket.collidesWith(r)).findFirst().ifPresent(r ->{
-				rocketsToRemove.add(r);
-				rocketsToRemove.add(rocket);
-			});
+			rockets.stream()
+					.filter(r -> !r.equals(rocket) && !rocketsToRemove.contains(rocket) && rocket.collidesWith(r))
+					.findFirst().ifPresent(r -> {
+						rocketsToRemove.add(r);
+						rocketsToRemove.add(rocket);
+						game.increaseScoreBy(15);
+					});
 		});
 		rockets.stream().filter(rocket -> rocket.getLayoutY() < -30 || rocket.getLayoutY() > 1920)
 				.forEach(rocketsToRemove::add);
@@ -141,9 +160,9 @@ public class Engine implements IGameController {
 			canvas.getChildren().remove(gamePaused);
 			if (game.isGameOver()) {
 				canvas.getChildren().add(gameOver);
-			}else if(game.isGameWon()) {
+			} else if (game.isGameWon()) {
 				canvas.getChildren().add(gameWon);
-			}else {
+			} else {
 				canvas.getChildren().add(gameStart);
 			}
 
@@ -168,7 +187,11 @@ public class Engine implements IGameController {
 			rockets.clear();
 			canvas.getChildren().clear();
 			canvas.getChildren().add(robot);
+			canvas.getChildren().add(scoreLabel);
 			canvas.getChildren().addAll(enemies);
+			canvas.getChildren().add(lifeLabel);
+			scoreLabel.setText("Score : 000");
+			lifeLabel.textProperty().bind(new SimpleStringProperty("Life : ").concat(robot.lifeProperty()));
 			game.reinitGame();
 			started = true;
 		} else if (paused) {
@@ -179,7 +202,7 @@ public class Engine implements IGameController {
 	}
 
 	protected BooleanProperty wonProperty() {
-		return wonProprety;
+		return this.wonProprety;
 	}
 
 	public void addRocket(Rocket rocket) {

@@ -2,7 +2,6 @@ package fr.upmc.spacewarar.main;
 
 import fr.upmc.spacewarar.engine.Engine;
 import fr.upmc.spacewarar.engine.Game;
-import fr.upmc.spacewarar.engine.interfaces.IGame;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -16,8 +15,6 @@ import javafx.stage.Stage;
  */
 public class MainClass extends Application {
 
-	
-	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("Space war AR");
@@ -42,8 +39,20 @@ public class MainClass extends Application {
 				Game.getCurrentGame().getGameController().stop();
 			}
 		});
-		
-//		Game.getCurrentGame().getGameController().start();
+
+		Game.getCurrentGame().getEventTrigger().setOnGameOver(() -> {
+		});
+		Game.getCurrentGame().getEventTrigger().setOnGameWinning(s -> {
+			System.out.println(s);
+		});
+		Game.getCurrentGame().getEventTrigger().setOnLeftCollision(() -> {
+		});
+		Game.getCurrentGame().getEventTrigger().setOnRightCollision(() -> {
+		});
+		Game.getCurrentGame().getEventTrigger().setOnScoreChanged(s -> {
+			System.out.println(s);
+		});
+		// Game.getCurrentGame().getGameController().start();
 	}
 
 	public static void main(String[] args) {
