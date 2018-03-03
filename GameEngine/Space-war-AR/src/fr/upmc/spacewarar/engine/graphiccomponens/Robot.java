@@ -1,16 +1,21 @@
 package fr.upmc.spacewarar.engine.graphiccomponens;
 
 import java.io.File;
-import java.util.concurrent.ThreadLocalRandom;
 
 import fr.upmc.spacewarar.engine.Engine;
 import fr.upmc.spacewarar.engine.EventTrigger;
 import fr.upmc.spacewarar.engine.Game;
+import fr.upmc.spacewarar.engine.graphiccomponens.Rocket.Direction;
 import fr.upmc.spacewarar.ocv.interfaces.IObjectTracker;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 
+/**
+ * 
+ * @author Mohamed T. Kassar & Hakima Bouguetof
+ *
+ */
 public class Robot extends GraphicComponent {
 	public enum Command {
 		SHOOT, NONE
@@ -34,8 +39,8 @@ public class Robot extends GraphicComponent {
 				+ new File("resources/crabe01.png").getAbsolutePath().replace("\\", "/")
 				+ "');-fx-background-size: stretch;");
 
-		collidesWhithLeftBorder.bind(layoutXProperty().lessThanOrEqualTo(0));
-		collidesWhithRightBorder.bind(layoutXProperty().greaterThanOrEqualTo(1920 - getPrefWidth()));
+		collidesWhithLeftBorder.bind(layoutXProperty().lessThan(0));
+		collidesWhithRightBorder.bind(layoutXProperty().greaterThan(1920 - getPrefWidth()));
 
 		Game game = (Game) Game.getCurrentGame();
 		EventTrigger eventTrigger = (EventTrigger) game.getEventTrigger();
@@ -47,11 +52,17 @@ public class Robot extends GraphicComponent {
 				.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
 					eventTrigger.rightCollisionTrigger();
 				});
+		
+		lifeProperty.addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+			System.out.println(newValue);
+		});
 	}
 
+	private int lastShoot = Engine.FPS / 8 + 1;
 	public void sendCommand(Command command) {
-		if (command == Command.NONE) {
+		if (this.command == Command.NONE && lastShoot > Engine.FPS / 8) {
 			this.command = command;
+			lastShoot = 0;
 		}
 	}
 
@@ -59,26 +70,39 @@ public class Robot extends GraphicComponent {
 		return lifeProperty;
 	}
 
-	protected void setLife(int life) { // TODO: change it by decreaseLifeBy !
-		lifeProperty.set(life);
+	public void decreaseLifeBy(int p) {
+		lifeProperty.set(lifeProperty.get() - p);
 	}
 
 	@Override
 	public void step() {
+		if (command != Command.NONE)
+			System.out.println(command);
 		switch (command) {
 		case SHOOT:
-			engine.addRocket(null);// TODO
+			engine.addRocket(new Rocket(getLayoutX() + getPrefWidth() / 2, getLayoutY() + 5, Direction.UP, 20));
+			command = Command.NONE;
 			break;
 		case NONE:
+			lastShoot = (lastShoot + 1) % Integer.MAX_VALUE;
 			break;
 		}
-		System.out.println("allo");
 		updatePosition();
-		command = Command.NONE;
 	}
 
+	private boolean dir = true;
+
 	private void updatePosition() {
-		IObjectTracker objectTracker = () -> ThreadLocalRandom.current().nextInt(100);
-		setLayoutX(objectTracker.getPosition() * 19.2);
+		IObjectTracker objectTracker = () -> {
+			if (getLayoutX() - 3 < 0) {
+				dir = true;
+			}
+			if (getLayoutX() + 3 > 1920 - getPrefWidth()) {
+				dir = false;
+			}
+			return (int) (dir ? getLayoutX() + 3 : getLayoutX() - 3);
+		};
+		setLayoutX(objectTracker.getPosition());
 	}
+
 }

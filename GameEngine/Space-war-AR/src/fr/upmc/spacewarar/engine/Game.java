@@ -18,9 +18,6 @@ public class Game implements IGame {
 	private final EventTrigger eventTrigger = new EventTrigger();
 	private final Engine engine = new Engine(this);
 
-	/*
-	 * TODO right/left collision
-	 */
 	private SimpleIntegerProperty scoreProperty;
 
 	private SimpleBooleanProperty gameOverProperty;
@@ -36,6 +33,7 @@ public class Game implements IGame {
 		gameWonProperty = new SimpleBooleanProperty(false);
 		// init preperties
 		gameOverProperty.bind(engine.getRobot().lifeProperty().lessThanOrEqualTo(0));
+		gameWonProperty.bind(engine.wonProperty());
 		// init triggers
 		scoreProperty.addListener((ObservableValue<? extends Number> observable, Number oldValue,
 				Number newValue) -> eventTrigger.scoreChangedTrigger(newValue.intValue()));// TODO : maybe put this code
@@ -43,25 +41,34 @@ public class Game implements IGame {
 		gameOverProperty
 				.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
 					if (newValue) {
-						gameOver();
+						setGameOver();
 					}
 				});
+		gameWonProperty.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+			if (newValue) {
+				setGameWon();
+			}
+		});
 
 	}
 
-	private void gameOver() {
+	private void setGameOver() {
 		// TODO :
+		// Show game over in the screen
+		engine.stop();
 		eventTrigger.gameOverTrigger();
+	}
+
+	private void setGameWon() {
+		// Show game won 
+		engine.stop();
+		eventTrigger.gameWinningEventTrigger(getScore());
 	}
 
 	public void setScore(int score) { // TODO : increaseScoreBy !!
 		scoreProperty.set(score);
 	}
 
-	public void setGameWon() {
-		gameWonProperty.set(true);
-		eventTrigger.gameWinningEventTrigger(getScore());
-	}
 
 	protected boolean isGameOver() {
 		return gameOverProperty.get();
