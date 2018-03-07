@@ -34,15 +34,15 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="400dp">
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/pause"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/right"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="21dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/button2"
                 android:onClick="pause"
                 android:text="pause" />
 
@@ -50,29 +50,39 @@
                 android:id="@+id/left"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/pause"
+                android:layout_centerVertical="true"
                 android:text="left" />
 
             <Button
                 android:id="@+id/right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_alignParentEnd="true"
+                android:layout_below="@+id/pause"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="29dp"
                 android:text="right" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:onClick="shoot"
+                android:text="SHOOT" />
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:onClick="disconnect"
+                android:text="DISCONNECT" />
 
         </RelativeLayout>
 
-        <Button
-            android:id="@+id/button7"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="disconnect"
-            android:text="disconnect" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
