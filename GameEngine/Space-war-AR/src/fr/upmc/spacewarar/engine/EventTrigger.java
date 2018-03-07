@@ -14,10 +14,11 @@ public class EventTrigger implements IEventTrigger {
 	private Runnable leftCollisionEvent;
 	private Runnable rightCollisionEvent;
 	private Runnable gameOverEvent;
+	private Runnable gamePausedEvent;
 
 	protected EventTrigger() {
 	}
-	
+
 	@Override
 	public void setOnScoreChanged(ScoreEvent event) {
 		changedScoreEvent = event;
@@ -32,7 +33,7 @@ public class EventTrigger implements IEventTrigger {
 	public void setOnRightCollision(Runnable event) {
 		rightCollisionEvent = event;
 	}
-	
+
 	@Override
 	public void setOnGameOver(Runnable event) {
 		gameOverEvent = event;
@@ -42,8 +43,12 @@ public class EventTrigger implements IEventTrigger {
 	public void setOnGameWinning(ScoreEvent event) {
 		gameWinningEvent = event;
 	}
-	
-	
+
+	@Override
+	public void setOnGamePaused(Runnable event) {
+		gamePausedEvent = event;
+	}
+
 	public void scoreChangedTrigger(int score) {
 		if (changedScoreEvent == null)
 			throw new RuntimeException("changedScoreEvent is not set !");
@@ -61,7 +66,7 @@ public class EventTrigger implements IEventTrigger {
 			throw new RuntimeException("rightCollisionEvent is not set !");
 		rightCollisionEvent.run();
 	}
-	
+
 	public void gameOverTrigger() {
 		if (gameOverEvent == null)
 			throw new RuntimeException("gameOverEvent is not set !");

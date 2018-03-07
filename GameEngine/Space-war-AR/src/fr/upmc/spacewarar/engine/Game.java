@@ -65,6 +65,10 @@ public class Game implements IGame {
 		eventTrigger.gameWinningEventTrigger(scoreProperty.get());
 	}
 
+	private void setGamePaused() {
+//		eventTrigger.
+	}
+	
 	public void increaseScoreBy(int score) {
 		scoreProperty.set(scoreProperty.get() + score);
 	}

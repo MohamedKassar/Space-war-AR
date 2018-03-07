@@ -18,4 +18,6 @@ public interface IEventTrigger {
 	void setOnGameOver(Runnable event);
 
 	void setOnGameWinning(ScoreEvent event);
+
+	void setOnGamePaused(Runnable event);
 }
