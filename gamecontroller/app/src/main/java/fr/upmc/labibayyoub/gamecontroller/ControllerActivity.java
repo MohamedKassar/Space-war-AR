@@ -29,7 +29,7 @@ public class ControllerActivity extends AppCompatActivity {
     private static final String RESUME = "RESUME";
     public static final String RIGHT = "R";
     public static final String LEFT = "L";
-    public static final String S_STOP = "S STOP";
+    public static final String S_STOP = "S";
     public static final String SWITCH_G = "SWITCH G";
     public static final String SWITCH_D = "SWITCH D";
     public static final String GO = "GO";
@@ -39,6 +39,8 @@ public class ControllerActivity extends AppCompatActivity {
     private String GG_REGULAR_EXPRESSION = "GG +[0-9]+";
     private Button left;
     private Button right;
+    private boolean leftButtonState = true;
+    private boolean rightButtonState = true;
     private Button pause;
     private TextView score_tv;
     private boolean onPause = false;
@@ -81,10 +83,26 @@ public class ControllerActivity extends AppCompatActivity {
                     return;
                 switch (msg) {
                     case SWITCH_D:
-                        runOnUiThread(() -> right.setEnabled(!right.isEnabled()));
+                        runOnUiThread(() -> {
+                            if(onPause){
+                                rightButtonState=!rightButtonState;
+                                return;
+                            }
+                           // sendCommands(S_STOP);
+                            right.setEnabled(!right.isEnabled());
+                            rightButtonState = right.isEnabled();
+                        });
                         break;
                     case SWITCH_G:
-                        runOnUiThread(() -> left.setEnabled(!left.isEnabled()));
+                        runOnUiThread(() ->{
+                            if(onPause){
+                                leftButtonState=!leftButtonState;
+                                return;
+                            }
+                            //sendCommands(S_STOP);
+                            left.setEnabled(!left.isEnabled());
+                            leftButtonState = left.isEnabled();
+                        });
                         break;
                     case GO:
                         runOnUiThread(() -> showMessage("Game over"));
@@ -168,13 +186,15 @@ public class ControllerActivity extends AppCompatActivity {
     }
 
     public void pause(View view) {
-
-        left.setEnabled(!left.isEnabled());
-        right.setEnabled(!right.isEnabled());
         if (onPause) {
+            left.setEnabled(leftButtonState);
+            right.setEnabled(rightButtonState);
             sendCommands(START);
             pause.setText(PAUSE);
         } else {
+            left.setEnabled(false);
+            right.setEnabled(false);
+
             sendCommands(STOP);
             pause.setText(RESUME);
         }
