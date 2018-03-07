@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignStart="@+id/button2"
+                android:layout_alignStart="@+id/shoot"
                 android:onClick="pause"
                 android:text="pause" />
 
@@ -64,7 +64,7 @@
                 android:text="right" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/shoot"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -80,6 +80,14 @@
                 android:layout_centerHorizontal="true"
                 android:onClick="disconnect"
                 android:text="DISCONNECT" />
+
+            <TextView
+                android:id="@+id/go"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="" />
 
         </RelativeLayout>
 
