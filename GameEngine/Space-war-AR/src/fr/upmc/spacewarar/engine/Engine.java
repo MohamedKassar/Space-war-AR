@@ -6,8 +6,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import org.omg.CosNaming.IstringHelper;
-
 import fr.upmc.spacewarar.engine.graphiccomponens.Enemy;
 import fr.upmc.spacewarar.engine.graphiccomponens.Robot;
 import fr.upmc.spacewarar.engine.graphiccomponens.Robot.Command;

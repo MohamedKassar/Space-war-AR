@@ -19,5 +19,4 @@ public interface IEventTrigger {
 
 	void setOnGameWinning(ScoreEvent event);
 
-	void setOnGamePaused(Runnable event);
 }
