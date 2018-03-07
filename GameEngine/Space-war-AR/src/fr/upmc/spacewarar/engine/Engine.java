@@ -15,6 +15,7 @@ import fr.upmc.spacewarar.engine.interfaces.IGameController;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -153,52 +154,59 @@ public class Engine implements IGameController {
 
 	@Override
 	public void stop() {
-		if (started) {
-			paused = false;
-			started = false;
-			scheduler.stop();
-			canvas.getChildren().remove(gamePaused);
-			if (game.isGameOver()) {
-				canvas.getChildren().add(gameOver);
-			} else if (game.isGameWon()) {
-				canvas.getChildren().add(gameWon);
-			} else {
-				canvas.getChildren().add(gameStart);
-			}
+		Platform.runLater(() -> {
+			if (started) {
+				paused = false;
+				started = false;
+				scheduler.stop();
+				canvas.getChildren().remove(gamePaused);
+				if (game.isGameOver()) {
+					canvas.getChildren().add(gameOver);
+				} else if (game.isGameWon()) {
+					canvas.getChildren().add(gameWon);
+				} else {
+					canvas.getChildren().add(gameStart);
+				}
 
-		}
+			}
+		});
 	}
 
 	@Override
 	public void pause() {
-		if (started) {
-			scheduler.pause();
-			paused = true;
-			canvas.getChildren().add(gamePaused);
-		}
+		Platform.runLater(() -> {
+			if (started) {
+				scheduler.pause();
+				paused = true;
+				canvas.getChildren().add(gamePaused);
+			}
+		});
+
 	}
 
 	@Override
 	public void start() {
-		if (!started) {
-			robot = new Robot(this);
-			enemies.clear();
-			enemiesPositions.stream().map(Enemy::new).forEach(enemies::add);
-			rockets.clear();
-			canvas.getChildren().clear();
-			canvas.getChildren().add(robot);
-			canvas.getChildren().add(scoreLabel);
-			canvas.getChildren().addAll(enemies);
-			canvas.getChildren().add(lifeLabel);
-			scoreLabel.setText("Score : 000");
-			lifeLabel.textProperty().bind(new SimpleStringProperty("Life : ").concat(robot.lifeProperty()));
-			game.reinitGame();
-			started = true;
-		} else if (paused) {
-			paused = false;
-			canvas.getChildren().remove(gamePaused);
-		}
-		scheduler.play();
+		Platform.runLater(() -> {
+			if (!started) {
+				robot = new Robot(this);
+				enemies.clear();
+				enemiesPositions.stream().map(Enemy::new).forEach(enemies::add);
+				rockets.clear();
+				canvas.getChildren().clear();
+				canvas.getChildren().add(robot);
+				canvas.getChildren().add(scoreLabel);
+				canvas.getChildren().addAll(enemies);
+				canvas.getChildren().add(lifeLabel);
+				scoreLabel.setText("Score : 000");
+				lifeLabel.textProperty().bind(new SimpleStringProperty("Life : ").concat(robot.lifeProperty()));
+				game.reinitGame();
+				started = true;
+			} else if (paused) {
+				paused = false;
+				canvas.getChildren().remove(gamePaused);
+			}
+			scheduler.play();
+		});
 	}
 
 	protected BooleanProperty wonProperty() {
