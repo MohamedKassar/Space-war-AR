@@ -74,6 +74,7 @@ public class ControllerActivity extends AppCompatActivity {
         }).start();
     }
 
+    @SuppressLint("WrongViewCast")
     private void receiveCommands() {
 
         while (!sc.isClosed()) {
@@ -105,7 +106,16 @@ public class ControllerActivity extends AppCompatActivity {
                         });
                         break;
                     case GO:
-                        runOnUiThread(() -> showMessage("Game over"));
+                        runOnUiThread(() -> {
+                            showMessage("Game over");
+                            left.setVisibility(View.INVISIBLE);
+                            right.setVisibility(View.INVISIBLE);
+                            pause.setVisibility(View.INVISIBLE);
+                            ((Button) findViewById(R.id.shoot)).setVisibility(View.INVISIBLE);
+                            ((TextView) findViewById(R.id.go)).setText("GAME OVER");
+
+
+                        });
                         break;
 
                     default:
