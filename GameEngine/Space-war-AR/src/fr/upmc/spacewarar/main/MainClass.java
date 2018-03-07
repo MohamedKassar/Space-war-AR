@@ -41,16 +41,19 @@ public class MainClass extends Application {
 		});
 
 		Game.getCurrentGame().getEventTrigger().setOnGameOver(() -> {
+			System.out.println("Game over");
 		});
 		Game.getCurrentGame().getEventTrigger().setOnGameWinning(s -> {
-			System.out.println(s);
+			System.out.println("win " + s);
 		});
 		Game.getCurrentGame().getEventTrigger().setOnLeftCollision(() -> {
+			System.out.println("Lest collision");
 		});
 		Game.getCurrentGame().getEventTrigger().setOnRightCollision(() -> {
+			System.out.println("Right collision");
 		});
 		Game.getCurrentGame().getEventTrigger().setOnScoreChanged(s -> {
-			System.out.println(s);
+			System.out.println("score changed " + s);
 		});
 		// Game.getCurrentGame().getGameController().start();
 	}

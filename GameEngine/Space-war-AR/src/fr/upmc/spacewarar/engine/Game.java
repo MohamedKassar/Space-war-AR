@@ -37,7 +37,8 @@ public class Game implements IGame {
 		// init triggers
 		scoreProperty.addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
 			Engine.scoreLabel.setText("Score : " + newValue);
-			eventTrigger.scoreChangedTrigger(newValue.intValue());
+			if (!(isGameOver() || isGameWon()))
+				eventTrigger.scoreChangedTrigger(newValue.intValue());
 		});
 		gameOverProperty
 				.addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {

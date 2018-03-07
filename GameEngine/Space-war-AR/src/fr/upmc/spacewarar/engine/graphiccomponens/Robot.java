@@ -53,9 +53,9 @@ public class Robot extends GraphicComponent {
 					eventTrigger.rightCollisionTrigger();
 				});
 		
-		lifeProperty.addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
-			System.out.println(newValue);
-		});
+//		lifeProperty.addListener((ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+//			System.out.println(newValue);
+//		});
 	}
 
 	private int lastShoot = Engine.FPS / 8 + 1;
@@ -76,8 +76,6 @@ public class Robot extends GraphicComponent {
 
 	@Override
 	public void step() {
-		if (command != Command.NONE)
-			System.out.println(command);
 		switch (command) {
 		case SHOOT:
 			engine.addRocket(new Rocket(getLayoutX() + getPrefWidth() / 2, getLayoutY() + 5, Direction.UP, 20));

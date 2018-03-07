@@ -6,12 +6,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+import org.omg.CosNaming.IstringHelper;
+
 import fr.upmc.spacewarar.engine.graphiccomponens.Enemy;
 import fr.upmc.spacewarar.engine.graphiccomponens.Robot;
 import fr.upmc.spacewarar.engine.graphiccomponens.Robot.Command;
 import fr.upmc.spacewarar.engine.graphiccomponens.Rocket;
 import fr.upmc.spacewarar.engine.graphiccomponens.Rocket.Direction;
 import fr.upmc.spacewarar.engine.interfaces.IGameController;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
@@ -105,7 +108,7 @@ public class Engine implements IGameController {
 
 	protected Engine(Game game) {
 		scheduler = new Timeline(new KeyFrame(Duration.millis(1000 / FPS), e -> step()));
-		scheduler.setCycleCount(Timeline.INDEFINITE);
+		scheduler.setCycleCount(Animation.INDEFINITE);
 		this.game = game;
 		enemies.addListener((Change<? extends Enemy> c) -> {
 			wonProprety.set(enemies.size() == 0);
@@ -121,7 +124,6 @@ public class Engine implements IGameController {
 					addRocket(new Rocket(enemy.getLayoutX() + enemy.getPrefWidth() / 2,
 							enemy.getLayoutY() + enemy.getPrefHeight() + 2, Direction.DOWN, 10));
 				});
-
 		List<Rocket> rocketsToRemove = new ArrayList<>();
 		rockets.forEach(rocket -> {
 			if (rocket.isEnemyRocket()) {
