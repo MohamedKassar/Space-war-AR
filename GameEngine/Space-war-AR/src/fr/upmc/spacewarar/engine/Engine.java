@@ -110,7 +110,7 @@ public class Engine implements IGameController {
 		scheduler.setCycleCount(Animation.INDEFINITE);
 		this.game = game;
 		enemies.addListener((Change<? extends Enemy> c) -> {
-			wonProprety.set(enemies.size() == 0);
+			if(started)wonProprety.set(enemies.size() == 0);
 		});
 	}
 
@@ -200,6 +200,7 @@ public class Engine implements IGameController {
 				scoreLabel.setText("Score : 000");
 				lifeLabel.textProperty().bind(new SimpleStringProperty("Life : ").concat(robot.lifeProperty()));
 				game.reinitGame();
+//				wonProprety.set(false);
 				started = true;
 			} else if (paused) {
 				paused = false;
