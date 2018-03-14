@@ -3,7 +3,11 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 26
     defaultConfig {
+<<<<<<< HEAD
         applicationId "fr.upmc.labib.gamecontroller"
+=======
+        applicationId "fr.upmc.labibayyoub.gamecontroller"
+>>>>>>> 7610ffb7cb6012b6e8fccba74fa3a526bf257112
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
@@ -16,12 +20,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+<<<<<<< HEAD
+=======
+    compileOptions {
+        targetCompatibility 1.8
+        sourceCompatibility 1.8
+    }
+>>>>>>> 7610ffb7cb6012b6e8fccba74fa3a526bf257112
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+<<<<<<< HEAD
+=======
+    implementation 'com.android.support:leanback-v17:26.1.0'
+    implementation 'com.github.bumptech.glide:glide:3.8.0'
+>>>>>>> 7610ffb7cb6012b6e8fccba74fa3a526bf257112
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
