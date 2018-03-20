@@ -3,6 +3,7 @@ package fr.upmc.spacewarar.ocv.impl;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.file.AccessDeniedException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -19,13 +20,23 @@ import org.opencv.core.Size;
 import org.opencv.highgui.Highgui;
 import org.opencv.imgproc.Imgproc;
 
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import com.github.sarxos.webcam.Webcam;
+
+
 import fr.upmc.spacewarar.ocv.interfaces.IObjectTracker;
 
 public class CalculPosition implements IObjectTracker {
 
 
 	public CalculPosition() {
-		// TODO Auto-generated constructor stub
+		nu.pattern.OpenCV.loadShared();
 	}
 
 
@@ -33,7 +44,7 @@ public class CalculPosition implements IObjectTracker {
 
 		double longueurTable = 0;
 		double[] centers = new double[2];
-		
+
 		// Pas besoin pour le moment
 		// On considere que les centres des cercles correspondent 
 		// aux positions 
@@ -50,19 +61,19 @@ public class CalculPosition implements IObjectTracker {
 			centers[i] = x;
 			radius[i] = vCircle[2];
 		}
-		
+
 		longueurTable = Math.abs(centers[1] - centers[0]); 
-		
+
 		double mCircle[] = circleMagenta.get(0, 0);
 		double positionAbs = mCircle[0];
-		
+
 		double leftCircle;
 		if(centers[1] > centers[0]) {
 			leftCircle = centers[0];
 		} else {
 			leftCircle = centers[1];
 		}
-		
+
 		return (positionAbs - leftCircle) * 100 / longueurTable;
 	}
 
@@ -97,7 +108,7 @@ public class CalculPosition implements IObjectTracker {
 		Imgproc.HoughCircles(magentaHueRange, circles,
 				Imgproc.CV_HOUGH_GRADIENT, 1,
 				magentaHueRange.rows()/4, 100, 20, 0, 0);
-		
+
 		System.out.println(circles.cols());
 
 		return circles;
@@ -122,18 +133,36 @@ public class CalculPosition implements IObjectTracker {
 
 		return circles;
 	}
-	
+
 	@Override
 	public int getPosition() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
+
 	public static void main(String[] args) {
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		nu.pattern.OpenCV.loadShared();
+		//System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 		CalculPosition c = new CalculPosition();
 		Mat image = Highgui.imread("C:\\Users\\hajar\\Pictures\\cercles.jpg");
 		System.out.println("Position ="+c.calculPosition(image));
+
+		
+		// Chercher une autre maniere de capturer des images ! 
+		// get default webcam and open it
+		/*Webcam webcam = Webcam.getDefault();
+		webcam.open();
+
+		// get image
+		BufferedImage image = webcam.getImage();
+
+		// save image to PNG file
+		try {
+			ImageIO.write(image, "PNG", new File("test.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 	}
 
 }
